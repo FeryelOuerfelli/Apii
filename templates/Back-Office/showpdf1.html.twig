@@ -1,0 +1,37 @@
+{% extends "base-pdf.html.twig" %}
+{% block title %}Matériel{{user.id}} {% endblock %}
+{% block body %}
+
+<div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.min.css">
+<h1 align='center' style="color: black">Fiche Employé</h1>
+ </div>
+
+ <div>
+<table width="100%" border="1">
+<tr>
+                <td colspan="2">
+                
+ <img  class="avatar avatar-img" src="{{ absolute_url (asset('FrontOffice/img/logoapii.jpg')) }}"   align='right' >
+
+<img src ="{{ absolute_url (asset('uploads/utilisateurs/' ~ user.image))  }}" width="200" height="100" class="img-fluid"  align='left' alt="Logo">
+
+<h3 style="color: blue" align='left'> Nom :{{ user.nom |capitalize }}</h3>
+<h3 style="color: blue" align='left' > Prénom :{{ user.prenom |capitalize  }}</h3>
+<h3 style="color: blue" align='left' > Adresse :{{ user.adresse }}</h3>
+<h3 style="color: blue" align='left' > Numero de Téléphone:{{ user.numTel  }}</h3>
+<h3 style="color: blue" align='left' > Spécialité:{{ user.specialite   }}</h3>
+<h3 style="color: blue" align='left' > Date de Naissance: <span>{{ user.dateDeNaissance ? user.dateDeNaissance|date('d-m-Y') : '' }}</span></li>
+<h3 style="color: blue" align='left' > Adresse :{{ user.adresse }}</h3>
+<h3 style="color: blue" align='left' > Region :{{ user.region  }}</h3>
+<h3 style="color: blue" align='left' > Structure :{{ user.structure  }}</h3>
+
+                                                
+
+
+</div>
+<br>
+
+
+
+{% endblock %}

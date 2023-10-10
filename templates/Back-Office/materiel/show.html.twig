@@ -1,0 +1,96 @@
+{% extends 'base-back.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="shortcut icon" href="{{ asset('BackAdmin/img/favicon.png') }}">
+
+    <link rel="stylesheet" href="{{asset('BackAdmin/css/bootstrap.min.css')}}">
+
+    <link rel="stylesheet" href="{{ asset('BackAdmin/plugins/fontawesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackAdmin/plugins/fontawesome/css/all.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('BackAdmin/css/feather.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('BackAdmin/css/style.css') }}">
+
+{% endblock %}
+
+
+{% block body %}
+<div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Matériels</h4>
+  {% if materiel.imagem %}
+                                                    <td><img class="rounded" src="{{ asset('uploads/utilisateurs/' ~ materiel.imagem ) }}" alt="Image"></td>
+                                                {% else %}
+                                                    <td><img class="rounded" src="{{ asset('uploads/utilisateurs/user1.png' ) }}" alt="Image"></td>
+                                                {% endif %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ materiel.id }}</td>
+            </tr>
+            <tr>
+                <th>Num_serie</th>
+                <td>{{ materiel.numSerie }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ materiel.nom }}</td>
+            </tr>
+            <tr>
+                <th>Marque</th>
+                <td>{{ materiel.marque }}</td>
+            </tr>
+            <tr>
+                <th>Date_achat</th>
+                <td>{{ materiel.dateAchat ? materiel.dateAchat|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+            
+
+             {% if materiel.etat == "En Panne" %}
+                                                    <td><span class="badge bg-badge-grey text-danger"><i class="fas fa-circle me-1"></i> En Panne </span></td>
+                                                {% elseif materiel.etat == "En Utilisation"  %}
+                                                    <td><span class="badge bg-badge-grey text-success"><i class="fas fa-circle me-1"></i> En Utilisation </span></td>
+                                              {% elseif materiel.etat == "En Stock" %}
+                                                    <td><span class="badge bg-badge-grey text-warning"><i class="fas fa-circle me-1"></i> En Stock</span></td>
+                                                {% endif %}
+                                                </tr>
+                                                <tr>
+                                                                <th>Affecté à </th>
+                                                         <td>{{ materiel.affectation }}</td>
+
+                                                 </tr>
+                                                  <tr>
+                                                                <th>Région</th>
+                                                         <td>{{ materiel.affectation.region }}</td>
+
+                                                 </tr>
+                                                  <tr>
+                                                                <th>Structure</th>
+                                                         <td>{{ materiel.affectation.structure }}</td>
+
+                                                 </tr>
+        <tr>
+                                             <td> <a href="{{ path('app_materiel_edit' , {'id': materiel.id}) }}"><i class="feather-edit-2"></i>Modifier</a></td>
+          <a href="{{ path('app_fact', {'id': materiel.id}) }}" class="btn btn-primary mt-3">{{ button_label|default('Imprimer ') }}</a>
+
+         </tr>
+         
+        </tbody>
+</table>
+
+    <tr>
+            {{ include('Back-Office/materiel/_delete_form.html.twig') }}
+</tr>
+<tr>
+    <a href="{{ path('list_materiels') }}" class="btn btn-link" >Rentrer à la liste</a>
+</tr>
+{% endblock %}
+
+

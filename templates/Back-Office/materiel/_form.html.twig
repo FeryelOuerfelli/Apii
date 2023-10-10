@@ -1,0 +1,101 @@
+{% extends 'base-back.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="shortcut icon" href="{{ asset('BackAdmin/img/favicon.png') }}">
+
+    <link rel="stylesheet" href="{{asset('BackAdmin/css/bootstrap.min.css')}}">
+
+    <link rel="stylesheet" href="{{ asset('BackAdmin/plugins/fontawesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('BackAdmin/plugins/fontawesome/css/all.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('BackAdmin/css/feather.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('BackAdmin/css/style.css') }}">
+
+{% endblock %}
+
+
+{% block body %}
+    <div class="page-wrapper">
+        <div class="card">
+            <div class="card-body">
+
+{{form_start(form,{'attr': {'novalidate': 'novalidate'}})}}
+
+ <div class="row form-row">
+                        <div class="col-12 col-md-12">
+                          
+                         <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Numéro De Série</label>
+                                {{ form_widget(form.num_serie,{attr:{'class':'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.num_serie,{attr:{'class':'text-danger'}})  }}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Nom</label>
+                                {{ form_widget(form.nom,{attr:{'class':'form-control '}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.nom,{attr:{'class':'text-danger'}})  }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Marque</label>
+                                {{ form_widget(form.marque,{attr:{'class':'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.marque,{attr:{'class':'text-danger'}})  }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Image </label>
+                                {{ form_widget(form.imagem,{attr:{'class':'form-control '}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.imagem,{attr:{'class':'text-danger'}})  }}
+                            </div>
+                        </div>
+                          
+                         <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Etat</label>
+                                {{ form_widget(form.etat,{attr:{'class':'form-select form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.etat,{attr:{'class':'text-danger'}})  }}
+                            </div>
+                        </div>
+                         
+                        
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Date_achat</label>
+                                {{ form_widget(form.date_achat,{attr:{'class':'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.date_achat,{attr:{'class':'text-danger'}})  }}
+                            </div>
+                        </div>
+                           
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Affecté à </label>
+                                {{ form_widget(form.affectation,{attr:{'class':'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.affectation,{attr:{'class':'text-danger'}})  }}
+                            </div>
+                        </div>
+
+    {{ form_widget(form) }}
+    <button class="btn btn-primary mt-3">{{ button_label|default('Ajouter Matériel') }}</button>
+{{ form_end(form) }}
+{% endblock %}

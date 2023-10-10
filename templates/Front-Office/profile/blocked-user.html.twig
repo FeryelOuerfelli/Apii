@@ -1,0 +1,47 @@
+{% block stylesheets %}
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('BackAdmin/img/favicon.png') }}">
+
+    <link rel="stylesheet" href="{{ asset('BackAdmin/css/bootstrap.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('BackAdmin/css/feather.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('BackAdmin/css/style.css') }}">
+
+
+{% endblock %}
+
+
+
+{% block body %}
+    <body class="error-page">
+
+    <div class="main-wrapper">
+        <div class="header d-none">
+
+            <ul class="nav nav-tabs user-menu">
+
+                <li class="nav-item">
+                    <a href="#" id="dark-mode-toggle" class="dark-mode-toggle">
+                        <i class="feather-sun light-mode"></i><i class="feather-moon dark-mode"></i>
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="error-box">
+            <img src="{{ asset('BackAdmin/img/404.png') }}" class="img-fluid" alt="404">
+            <h4>Désolé, votre compte a été bloqué par l'administrateur pour non-respect des conditions d'utilisations</h4>
+            <p>Veuillez contacter le service d'assistance pour plus d'informations sur la manière de résoudre ce problème</p>
+            <a href="{{ path('app_logout') }}" class="btn btn-primary"><i class="feather-home me-2"></i>Retour</a>
+        </div>
+
+    </div>
+
+    </body>
+
+{% endblock %}
+
+
+

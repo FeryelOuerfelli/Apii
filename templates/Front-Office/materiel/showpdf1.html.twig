@@ -1,0 +1,89 @@
+{% extends "base-pdf.html.twig" %}
+{% block title %}Matériel{{materiel.id}} {% endblock %}
+{% block body %}
+
+<div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.min.css">
+
+
+
+<h1 align='center' style="color: blue">Matériel</h1>
+
+
+ </div>
+
+ <div>
+<table width="100%" border="1">
+<tr>
+                <td colspan="2">
+                
+ <img  src="{{ absolute_url (asset('FrontOffice/img/logoapii.jpg')) }}" class="img-fluid"  align='right' alt="Logo">
+ <img src="{{ absolute_url (asset('FrontOffice/img/logoapii.jpg')) }}" class="img-fluid"  align='left'   alt="Logo">
+
+
+        <img src ="{{ absolute_url (asset('uploads/utilisateurs/' ~ materiel.imagem))  }}" align='center' >
+<h3 style="color: blue" align='center' > Numero de Serie  :{{ materiel.numSerie }}</h3>
+<h3 style="color: blue" align='center' > Nom :{{ materiel.nom }}</h3>
+<h3 style="color: blue" align='center' > Marque :{{ materiel.marque }}</h3>
+<h3 style="color: blue" align='center' > Etat :{{ materiel.etat }}</h3>
+
+
+
+<h3 style="color: blue" align='center' >Date d'achat: <span>{{ materiel.dateAchat ? materiel.dateAchat|date('d-m-Y') : '' }}</span></li>
+
+</div>
+<br>
+<br>
+<div>
+
+       
+    
+
+
+
+   
+    <table width="100%" style="font-family: sans-serif;" cellpadding="10">
+
+        <tr>
+            <td width="49%" style="border: 0.1mm solid #eee;"><h3  style="color: blue">Affecté à </h3><strong>{{ materiel.affectation }}</strong><br>{{ materiel.affectation.region }}<br>{{ materiel.affectation.structure }}<br>{{ materiel.affectation.email }}</td>
+            <td width="2%">&nbsp;</td>
+
+        </tr>
+    </table>
+
+<br>
+<br>
+
+<br>
+
+<table border=1>
+        <thead>
+            <tr>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              
+
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+<div class ="right">
+
+<br>
+
+
+
+            
+</div>
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'base-front.html.twig' %}
+
+{% block stylesheets %}
+
+    <link href="{{ asset('FrontOffice/img/favicon.png') }}" rel="icon">
+
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/bootstrap.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('FrontOffice/plugins/fontawesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/plugins/fontawesome/css/all.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/feather.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/bootstrap-datetimepicker.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('FrontOffice/plugins/select2/css/select2.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('FrontOffice/plugins/fancybox/jquery.fancybox.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/style.css') }}">
+
+
+{% endblock %}
+
+
+{% block body %}
+<div class="main-wrapper">
+  <div class="content">
+    <div class="container-fluid col-10">
+      <div class="row">
+        <div class="d-flex justify-content-end">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+        {% for employe in employes %}
+            {% if employe.etat == 'valide' and employe.isBlocked == false %}
+                 <div class="card">
+                        <div class="card-body">
+                              <div class="doctor-widget">
+                                    <div class="doc-info-left">
+                                        <div class="doctor-img">
+                                            {% if employe.image %}
+                                                <img src="{{ asset('uploads/utilisateurs/' ~ employe.image ) }}" class="img-fluid" alt="Image">
+                                            {% else %}
+                                                <img src="{{ asset('uploads/utilisateurs/user1.png' ) }}" class="img-fluid" alt="Image">
+                                            {% endif %}
+                                        </div>
+                                        <div class="doc-info-cont">
+                                            <h4 class="doc-name">{{ employe.nom |capitalize }} {{ employe.prenom |capitalize }}</h4>
+                                            <p class="doc-speciality">{{ employe.specialite |capitalize }}</p>
+
+                                            <div class="clinic-details">
+                                                {% if employe.adresse or employe.numTel %}
+                                                    <p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ employe.adresse |capitalize }}</p>
+                                                    <p class="doc-location"><i class="fas fa-phone"></i> {{ employe.numTel  }}</p>
+                                                {% else %}
+                                                   <p class="doc-location"> {{ employe.region }}</p>
+                                                   <p class="doc-location"> {{ employe.structure}}</p>
+
+                                                    <p class="doc-location"> {{ employe.adresse |capitalize }}</p>
+                                                    <p class="doc-location"> {{ employe.numTel  }}</p>
+
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="doc-info-right mt-4">
+                                        <div class="clinic-booking ">
+                                            {% if not(is_granted('IS_AUTHENTICATED_FULLY')) %}
+                                                <a class="btn btn-primary" href="{{ path('app_login') }}">Prendre un rendez-vous</a>
+                                            {% endif %}
+                                           
+                                        </div>
+                                    </div>
+                              </div>
+                        </div>
+                 </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+        {% if isPaginated  %}
+            <div class="d-flex justify-content-center">
+                <nav aria-label="col Page navigation example">
+                    <ul class="pagination">
+                        {% if page != 1 %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('list_employes', {page: page - 1, nbre: nbre}) }}">Previous</a></li>
+                        {% endif %}
+                        {% for i in range(1, nbrePage) %}
+                            <li class="page-item">
+                                <a class="page-link"  href="{{ path('list_employes', {page: i, nbre: nbre}) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if page != nbrePage %}
+                            <li class="page-item">
+                                <a class="page-link"  href="{{ path('list_employes', {page: page + 1, nbre: nbre}) }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
+            </div>
+        {% endif %}
+
+    </div>
+  </div>
+ </div>
+ </div>
+</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+  <script src="{{ asset('FrontOffice/js/jquery-3.6.0.min.js')  }}"></script>
+
+    <script src="{{ asset('FrontOffice/js/bootstrap.bundle.min.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
+    <script src="{{ asset('FrontOffice/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/plugins/select2/js/select2.min.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/js/moment.min.js') }}"></script>
+    <script src="{{ asset('FrontOffice/js/bootstrap-datetimepicker.min.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/plugins/fancybox/jquery.fancybox.min.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/js/feather.min.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/js/script.js') }}"></script>
+
+{% endblock %}

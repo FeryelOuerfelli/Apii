@@ -1,0 +1,121 @@
+{% extends 'sideBar.html.twig' %}
+{% block page %}
+{% endblock %}
+{% block lien %}
+{% endblock %}
+
+{% block content %}
+     <div class="appointment-tab">
+
+ <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded p-3" role="tablist">
+  
+    {{ form_start(form ,{'attr': {'class': 'flex-grow-1 me-3 ' ,'novalidate': 'novalidate'}}) }}
+
+<div class="d-flex align-items-center  justify-content-end" style="height: 50px;">
+
+    {{ form_widget(form) }}
+
+    <button class="btn btn-primary btn-rounded mx-3">{{ button_label|default('Chercher') }}</button>
+</div>    
+
+{{ form_end(form) }}
+    </ul>
+
+<div class="tab-content pt-0">
+<div id="upcoming-appointments" class="tab-pane fade show active" role="tabpanel">
+<div class="card card-table mb-0">
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-hover table-center mb-0">
+        <thead>
+            <tr>
+                {% if is_granted('ROLE_PATIENT') %}
+                    <th>Medecin</th>
+                {% else %}
+                    <th>Patient</th>
+                {% endif %}                <th>Date</th>
+                <th>Heure</th>
+                <th>Etat</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+        {% for rendez_vou in rendez_vouses %}
+            <tr>
+                <td>
+                    <h2 class="table-avatar">
+                        {% if is_granted('ROLE_MEDECIN') %}
+                            {% if rendez_vou.patient.image %}
+                                <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/' ~ rendez_vou.patient.image ) }}"  width="31" alt="image">
+                            {% else %}
+                                <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/user1.png' ) }}"  width="31" alt="image">
+                            {% endif %}
+                            <a>{{ rendez_vou.patient.nom}} {{ rendez_vou.patient.prenom}} </a>
+
+                        {% else %}
+                            {% if rendez_vou.planning.medecin.image %}
+                                <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/' ~ rendez_vou.planning.medecin.image ) }}"  width="31" alt="image">
+                            {% else %}
+                                <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/user1.png' ) }}"  width="31" alt="image">
+                            {% endif %}
+                            <a>{{ rendez_vou.planning.medecin.nom}} {{ rendez_vou.planning.medecin.prenom}} </a>
+
+                        {% endif %}
+                    </h2>
+
+                </td>
+                
+                <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d') : '' }}</td>
+                <td>{{ rendez_vou.heureDebut ? rendez_vou.heureDebut|date('H:i:s') : '' }}-{{ rendez_vou.heureFin ? rendez_vou.heureFin|date('H:i:s') : '' }}</td>
+                <td>
+                {% if rendez_vou.etat =="en attente" %}
+                <span class="badge rounded-pill bg-warning-light">
+                {% endif %}
+                {% if rendez_vou.etat =="confirmé" %}
+                <span class="badge rounded-pill bg-success-light">
+                {% endif %}
+                {% if rendez_vou.etat =="annulé" %}
+                <span class="badge rounded-pill bg-danger-light">
+                {% endif %}
+                {{ rendez_vou.etat }}</span>
+                </td>
+                <td class="text-end ">
+                <div class="table-action">
+                    <a class="mr-3 btn btn-sm bg-info-light " href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}"><i class="far fa-eye"></i>consulter</a>
+                    <a class="mr-3 btn btn-sm bg-success-light" href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}"><i class="fas fa-edit"></i>modifier</a>
+                </div>
+
+                </td>
+                {% if rendez_vou.etat =="en attente" and is_granted('ROLE_MEDECIN')%}
+                <td class="text-end">
+                <div class="table-action">
+                    {{ include('Front-Office/rendez_vous/_confirm_form.html.twig') }}
+
+                </div>
+                </td>
+                {% endif %}
+                {% if rendez_vou.etat !="annulé" %}
+
+                <td class="text-end">
+                  <div class="table-action">
+                    {{ include('Front-Office/rendez_vous/_cancel_form.html.twig') }}
+
+                </div>
+                </td>
+                {% endif %}
+
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Pas de resultats</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+</div>
+
+</div>
+{% endblock %}

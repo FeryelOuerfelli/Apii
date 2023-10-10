@@ -1,0 +1,180 @@
+{% extends 'sideBar.html.twig' %}
+{% block lien %}
+<a href="{{ path('app_planning_new', {'id': 29}) }}" class="btn btn-primary btn-sm" >Ajouter planning</a>
+{% endblock %}
+{% block calendarStyle %}
+<link rel="stylesheet" href="{{asset('FrontOffice/plugins/fullcalendar/fullcalendar.min.css')}}">
+
+{% endblock %}
+{% block content %}
+
+<div class="card-body">
+<div id="calendar"></div>
+</div>
+{% endblock %}
+{% block calendarScript %}
+
+<!-- moment lib -->
+<script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
+
+<!-- fullcalendar bundle -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
+
+<!-- the moment-to-fullcalendar connector. must go AFTER the moment lib -->
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@6.1.4/index.global.min.js'></script>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'timeGridWeek',
+          locale:'fr',
+          //eventOverlap:false,
+          timezone: 'local',
+          slotDuration: '00:30:00', /* If we want to split day time each 15minutes */
+          headerToolbar: {
+            start: 'prev,next today',
+            center: 'title',
+            end: 'dayGridMonth,timeGridWeek,timeGridDay'
+          },
+          navLinks: true,
+          selectable: true,
+          events:{{ data | raw }},
+          editable:true,
+          droppable:true,
+          dayMaxEventRows: true,
+          dateClick: function(info) {
+            var events = calendar.getEvents().filter(function(event) {
+              return info.date >= event.start && info.date < event.end && event.display === 'background';
+            });
+              if (events.length > 0) {
+                var event = events[0];
+                    if (event.display === 'background') {
+                      // handle click on planning event
+                      // show a modal to allow user to create a new rendezVous event
+                      console.log('background clicked');     
+                      console.log('evenelment',event);
+                      $.ajax({
+                      url: '/calendar/new/'+ event.id,
+                      method: 'GET',
+                      success: function(response) {
+                        // create the modal and add the form HTML to the body
+                        var $modal = $('<div>').addClass('modal fade')
+                          .attr('tabindex', '-1')
+                          .attr('role', 'dialog')
+                          .appendTo('body');
+                        var $dialog = $('<div>').addClass('modal-dialog')
+                          .attr('role', 'document')
+                          .appendTo($modal);
+                        var $content = $('<div>').addClass('modal-content')
+                          .appendTo($dialog);
+                        var $title= $('<h3>')
+                          .text('Ajouter rendezVous')
+                          .appendTo($content); 
+                        var $body = $('<div>').addClass('modal-body')
+                          .html(response)
+                          .appendTo($content);
+                          console.log('info',info)
+                        $body.find('form');
+                        $body.find('#rendez_vous_calendar_date').val(moment(info.date).format('YYYY-MM-DD')).attr('readonly', 'readonly');;
+                        $body.find('#rendez_vous_calendar_heure_debut').val(moment(info.date).format('HH:mm')).attr('readonly', 'readonly');;
+                        $body.find('#rendez_vous_calendar_heure_fin').val(moment(info.date).add(1, 'hour').format('HH:mm')).attr('readonly', 'readonly');;
+                        var $footer = $('<div>').addClass('modal-footer')
+                          .appendTo($content);
+                        //var $submit = $('<button>').addClass('btn btn-primary')
+                        // .text('Save')
+                        // .appendTo($footer);
+                        var $close = $('<button>').addClass('btn btn-secondary')
+                          .attr('data-dismiss', 'modal')
+                          .text('Annuler')
+                          .appendTo($footer);
+                        $close.on('click', function() {
+                            $modal.modal('hide');
+                        });
+
+                        //$body.find('#rendez_vous_calendar_date').attr('disabled', 'disabled');
+
+                        $body.find('form').on('submit', function(info) {
+                            
+                        // event.preventDefault();
+                          var formValues = $(this).serializeArray();
+                            // add additional data to the array
+                            console.log(formValues)
+                              // serialize the array as a query string
+                            var formData = $.param(formValues);
+                            
+                          $.ajax({
+                            url: '/calendar/new/'+ event.id,
+                            method: 'POST',
+                            data:$(this).serialize(),
+
+                            //,
+
+                            success: function(response) {
+                              console.log('success');
+                              $modal.modal('hide');
+                            },
+                            error: function(xhr, status, error) {
+                              console.log('error');
+                            }
+                          });
+                        });
+
+                        // show the modal
+                        $modal.modal('show');
+                      },
+                    error: function(xhr, status, error) {
+                      console.log('error');
+                    }
+                    })
+                    }
+              }
+          },
+          eventDrop: function(info) {
+               var eventStart = info.event.start;
+              var eventEnd = info.event.end;
+              calendar.getEvents().forEach(function(event) {
+                if (event.display === 'background' &&
+                    eventStart >= event.start &&
+                    eventEnd <= event.end) {
+                    console.log("backgroundEvent",event.id);
+                    console.log('hhhhhh',info);
+                    var donnees ={
+                      "id" : info.event.id,
+                        "patient_id":info.event.extendedProps.patientId,
+
+                        "title": info.event.title,
+                      "symptomes": info.event.extendedProps.symptomes,
+                      "date": (moment(info.event.start).format('YYYY-MM-DD')),
+                      "heureDebut": moment(info.event.start).format('HH:mm'),
+                      "heureFin": moment(info.event.start).add(1, 'hour').format('HH:mm'),
+                      "planningId": event.id
+
+                    }
+                    alert(info.event.title + " was dropped on " + info.event.start.toISOString());
+                   if(confirm("Are you sure about this change?")){
+                     $.ajax({
+                              url: '/calendar/'+ info.event.id +'/edit',
+                              method: 'POST',
+                              data:JSON.stringify(donnees),
+                              success: function(response) {
+                                console.log('succes')
+                      }});
+                   }
+                    // var xhr = new XMLHttpRequest
+                    //  xhr.open("POST",url)
+                      //xhr.send(JSON.stringify(donnees))
+                    if (!confirm("Are you sure about this change?")) {
+                      info.revert();
+                    }
+                }
+        });
+
+          }
+        });
+
+        calendar.render();
+      });
+
+</script>
+
+{% endblock %}

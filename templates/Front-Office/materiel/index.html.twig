@@ -1,0 +1,118 @@
+{% extends 'sideBar.html.twig' %}
+{% block page %}
+{% endblock %}
+{% block lien %}
+{% endblock %}
+
+
+
+
+{% block content %}
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Matériels</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-nowrap mb-0">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Photo</th>
+                                    <th>Num_serie</th>
+                                   <th>Nom</th>
+                                  <th>Marque</th>
+                                 <th>Date_achat</th>
+                                    <th>Affecté à </th> 
+                                      <th>Région </th> 
+                                      <th>Structure </th> 
+                                     <th>Etat</th>
+                                       <th>   </th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                            {% for materiel in materiels %}
+                                            <tr>
+                
+                                              <td>{{ materiel.id }}</td>
+                                                {% if materiel.imagem %}
+                                                    <td><img class="avatar avatar-img" src="{{ asset('uploads/utilisateurs/' ~ materiel.imagem ) }}" alt="Image"></td>
+                                                {% else %}
+                                                    <td><img class="avatar avatar-img" src="{{ asset('uploads/utilisateurs/user1.png' ) }}" alt="Image"></td>
+                                                {% endif %}
+                                                  <td>{{ materiel.numSerie }}</td>
+                                                <td><span>{{ materiel.nom |capitalize }}</span></td>
+                                                <td><span>{{ materiel.marque |capitalize }}</span></td>
+                                                 <td>{{ materiel.dateAchat ? materiel.dateAchat|date('Y-m-d') : '' }}</td>
+                                                  <td>{{ materiel.affectation }}</td>
+                                                  <td>{{ materiel.affectation.region }}</td>
+                                                  <td>{{ materiel.affectation.structure }}</td>
+
+                                                {% if materiel.etat == "En Panne" %}
+                                                    <td><span class="badge bg-badge-grey text-danger"><i class="fas fa-circle me-1"></i> En Panne </span></td>
+                                                {% elseif materiel.etat == "En Utilisation"  %}
+                                                    <td><span class="badge bg-badge-grey text-success"><i class="fas fa-circle me-1"></i> En Utilisation </span></td>
+                                              {% elseif materiel.etat == "En Stock" %}
+                                                    <td><span class="badge bg-badge-grey text-warning"><i class="fas fa-circle me-1"></i> En Stock</span></td>
+                                                {% endif %}
+
+                                             <td><a href="{{ path('app_materiel_show_emp', {'id': materiel.id}) }}">Voir</a></td>
+
+
+                                               
+                                                
+                                            </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if isPaginated  %}
+                <div class="d-flex justify-content-center">
+                    <nav aria-label="col Page navigation example">
+                        <ul class="pagination">
+                            {% if page != 1 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ path('list_materiels_emp', {page: page - 1, nbre: nbre}) }}">Previous</a></li>
+                            {% endif %}
+                            {% for i in range(1, nbrePage) %}
+                                <li class="page-item">
+                                    <a class="page-link"  href="{{ path('list_materiels_emp', {page: i, nbre: nbre}) }}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+                            {% if page != nbrePage %}
+                                <li class="page-item">
+                                    <a class="page-link"  href="{{ path('list_materiels_emp', {page: page + 1, nbre: nbre}) }}">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    <script src="{{ asset('BackAdmin/js/jquery-3.6.0.min.js') }}"></script>
+
+    <script src="{{ asset('BackAdmin/js/bootstrap.bundle.min.js') }}"></script>
+
+    <script src="{{ asset('BackAdmin/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+
+    <script src="{{ asset('BackAdmin/js/script.js') }}"></script>
+
+{% endblock %}

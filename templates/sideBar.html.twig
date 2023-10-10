@@ -1,0 +1,140 @@
+{% extends 'base-front.html.twig' %}
+
+{% block body %}
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+
+                {% block side %}
+                    <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+                        <div class="profile-sidebar">
+                            <div class="widget-profile pro-widget-content">
+                                <div class="profile-info-widget">
+                                    <a href="#" class="booking-doc-img">
+                                        {% if app.user.image %}
+                                            <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/' ~ app.user.image ) }}"  width="31" alt="image">
+                                        {% else %}
+                                            <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/user1.png' ) }}"  width="31" alt="image">
+                                        {% endif %}
+                                    </a>
+                                    <div class="profile-det-info">
+                                        <h3>{{ app.user.nom | capitalize }} {{ app.user.prenom |capitalize }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if is_granted('ROLE_MEDECIN') %}
+                            <div class="dashboard-widget">
+                                <nav class="dashboard-menu">
+                                    <ul>
+                                        <li >
+                                            <a href="{{ path('app_rendez_vous_index') }}">
+                                                <i class="fas fa-calendar-check"></i>
+                                                <span>Rendez-vous</span>
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="{{ path('app_calendar',{'id_medecin':user.id}) }}">
+                                                <i class="fas fa-calendar-check"></i>
+                                                <span>Calendrier</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="{{ path('app_planning_index') }}">
+                                                <i class="fas fa-clock"></i>
+                                                <span>Planning</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="{{ path('app_medecin_profile') }}">
+                                                <i class="fas fa-user-cog"></i>
+                                                <span>Parametre du profile</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_logout') }}">
+                                                <i class="fas fa-sign-out-alt"></i>
+                                                <span>Se déconnecter</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            {% elseif is_granted('ROLE_EMPLOYE') %}
+                            <div class="dashboard-widget">
+                                <nav class="dashboard-menu">
+                                    <ul>
+                                        <li class="active">
+                                            <a href="{{ path('list_materiels_emp') }}">
+                                                <i class="fas fa-calendar-check"></i>
+                                                <span>Liste du matériel</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="{{ path('app_employe_profile') }}">
+                                                <i class="fas fa-user-cog"></i>
+                                                <span>Paramètres du profil</span>
+                                            </a>
+                                        </li>
+                                         <li>
+                                            <a href="{{ path('list_materiels_empper' , {'id': app.user.id}) }}">
+                                                <i class="fas fa-user-cog"></i>
+                                                <span>Mon Materiel</span>
+
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="{{ path('app_logout') }}">
+                                                <i class="fas fa-sign-out-alt"></i>
+                                                <span>Se déconnecter</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            {% elseif is_granted('ROLE_PATIENT') %}
+                            <div class="dashboard-widget">
+                                <nav class="dashboard-menu">
+                                    <ul>
+                                        <li class="active">
+                                            <a href="{{ path('app_rendez_vous_index') }}">
+                                                <i class="fas fa-calendar-check"></i>
+                                                <span>Rendez-vous</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="{{ path('app_user_profile') }}">
+                                                <i class="fas fa-user-cog"></i>
+                                                <span>Parametre du profile</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="index.html">
+                                                <i class="fas fa-sign-out-alt"></i>
+                                                <span>Se déconnecter</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endblock %}
+
+                <div class="col-md-7 col-lg-8 col-xl-9">
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

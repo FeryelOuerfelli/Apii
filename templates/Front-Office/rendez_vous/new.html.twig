@@ -1,0 +1,9 @@
+{% extends 'sideBar.html.twig' %}
+
+{% block content %}
+    <h3>Reserver un RendezVous</h3>
+
+    {{ include('Front-Office/rendez_vous/_form.html.twig') }}
+
+    <a href="{{ path('app_rendez_vous_index') }}">back to list</a>
+{% endblock %}

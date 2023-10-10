@@ -1,0 +1,73 @@
+{% extends 'base-front.html.twig' %}
+{% block rdvModal %}
+<!-- Modal for creating or editing rendezVous events -->
+<div class="modal fade" id="rendezVousModal" tabindex="-1" role="dialog" aria-labelledby="rendezVousModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rendezVousModalLabel">Create RendezVous Event</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="rendezVousForm">
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="rendezVousStartDate">Start Date</label>
+            <input type="text" class="form-control" id="rendezVousStartDate" name="start" readonly required>
+          </div>
+          <div class="form-group">
+            <label for="rendezVousEndDate">End Date</label>
+            <input type="text" class="form-control" id="rendezVousEndDate" name="end" readonly required>
+          </div>
+          <div class="form-group">
+            <label for="rendezVousStartTime">Start Time</label>
+            <input type="time" class="form-control" id="rendezVousStartTime" name="startTime"  required>
+          </div>
+        <div class="form-group">
+            <label for="rendezVousEndTime">End Time</label>
+            <input type="time" class="form-control" id="rendezVousEndTime" name="endTime"  required>
+          </div>
+        <div class="form-group">
+            <label for="rendezVousSymptomes">Symptomes</label>
+            <input type="text" class="form-control" id="rendezVousSymptomes" name="symptomes" required>
+          </div>
+          <!-- add other form fields for rendezVous event properties -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for editing rendezVous events -->
+<div class="modal fade" id="editRendezVousModal" tabindex="-1" role="dialog" aria-labelledby="editRendezVousModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editRendezVousModalLabel">Edit RendezVous Event</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="editRendezVousForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editRendezVousTitle">Title</label>
+            <input type="text" class="form-control" id="editRendezVousTitle" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="editRendezVousStartDate">Start Date</label>
+            <input type="text" class="form-control" id="editRendezVousStartDate" name="start" readonly required>
+          </div>
+          <div class="form-group">
+            <label for="editRendezVousEndDate">End Date</label>
+            <input type="text" class="form-control" id="editRendezVousEndDate" name="end" readonly required>
+          </div>
+          <!-- add other form fields for rendezVous event properties -->
+        </div>
+{% endblock %}

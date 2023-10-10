@@ -1,0 +1,173 @@
+{% extends 'base-back.html.twig' %}
+
+
+{% block body %}
+
+    <div class="page-wrapper">
+        <div class="content container-fluid pb-0">
+            <div class="row">
+                <div class="col-xl-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dash-widget-header">
+                                    <span class="dash-widget-icon bg-primary">
+                                    <i class="feather-user-plus"></i>
+                                    </span>
+                                <div class="dash-count">
+                                    <h5 class="dash-title">Employés</h5>
+                                    <div class="dash-counts">
+                                        <p>{{ nbE }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="col-xl-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dash-widget-header">
+                                    <span class="dash-widget-icon bg-primary">
+                                    <i class="feather-user-plus"></i>
+                                    </span>
+                                <div class="dash-count">
+                                    <h5 class="dash-title">Hommes</h5>
+                                    <div class="dash-counts">
+                                        <p>{{ nbH }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dash-widget-header">
+                                    <span class="dash-widget-icon bg-blue">
+                                    <i class="feather-users"></i>
+                                    </span>
+                                <div class="dash-count">
+                                    <h5 class="dash-title">Femmes</h5>
+                                    <div class="dash-counts">
+                                        <p>{{ nbF}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            <div class="col-xl-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dash-widget-header">
+                                    <span class="dash-widget-icon bg-primary">
+                                    <i class="feather-user-plus"></i>
+                                    </span>
+                                <div class="dash-count">
+                                    <h5 class="dash-title">materiels</h5>
+                                    <div class="dash-counts">
+                                        <p>{{ nbMat }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dash-widget-header">
+                                    <span class="dash-widget-icon bg-primary">
+                                    <i class="feather-user-plus"></i>
+                                    </span>
+                                <div class="dash-count">
+                                    <h5 class="dash-title">Materiels En Panne</h5>
+                                    <div class="dash-counts">
+                                        <p>{{ nbMatPanne }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                   <div class="col-xl-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dash-widget-header">
+                                    <span class="dash-widget-icon bg-primary">
+                                    <i class="feather-user-plus"></i>
+                                    </span>
+                                <div class="dash-count">
+                                    <h5 class="dash-title">Materiels En Utlisation</h5>
+                                    <div class="dash-counts">
+                                        <p>{{ nbMatUtilis}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                   <div class="col-xl-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dash-widget-header">
+                                    <span class="dash-widget-icon bg-primary">
+                                    <i class="feather-user-plus"></i>
+                                    </span>
+                                <div class="dash-count">
+                                    <h5 class="dash-title">Materiels En Stock</h5>
+                                    <div class="dash-counts">
+                                        <p>{{ nbMatStock}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           
+
+                <div class="col-xl-7 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="card-title">Appointments</h5>
+                                </div>
+                                <div class="col-auto d-flex">
+                                    <select class="select">
+                                        <option>2022</option>
+                                        <option>2022</option>
+                                    </select>
+                                    <div class="ms-2">
+                                        <select class="select">
+                                            <option>Select Type</option>
+                                            <option>Video</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="sales_chart"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+
+            </div>
+
+
+          
+          
+        </div>
+    </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'sideBar.html.twig' %}
+
+{% block content %}
+    <h3>Ajouter Un programme</h3>
+
+    {{ include('Front-Office/planning/_form.html.twig') }}
+
+    <a href="{{ path('app_planning_index') }}">back to list</a>
+{% endblock %}

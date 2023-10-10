@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from doccure.dreamguystech.com/laravel/template/public/index by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 07 Feb 2023 19:55:59 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>{% block title %}Gestion Stock APII{% endblock %}</title>
+
+{% block stylesheets %}
+    <link type="image/x-icon" href="{{asset('FrontOffice/img/favicon.png') }}" rel="icon">
+    <link rel="stylesheet" href="{{asset('FrontOffice/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('BackAdmin/css/feather.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/plugins/fontawesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/plugins/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/plugins/swiper/css/swiper.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/aos.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/style.css') }}">
+
+    {% block calendarStyle %}
+
+    {% endblock %}
+{% endblock %}
+</head>
+<body>
+{% block header %}
+<div class="main-wrapper">
+    <header class="header">
+        <nav class="navbar navbar-expand-lg header-nav">
+            <div class="navbar-header">
+                <a id="mobile_btn" href="javascript:void(0);">
+                    <span class="bar-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    </span>
+                </a>
+                <a href="index.html" class="navbar-brand logo">
+                    <img src="{{ asset('FrontOffice/img/logoapii.jpg') }}" class="img-fluid" alt="Logo">
+                </a>
+            </div>
+            <div class="main-menu-wrapper">
+                <div class="menu-header">
+                    <a href="index.html" class="menu-logo">
+                        <img src="{{ asset('FrontOffice/img/logoapii.jpg') }}" class="img-fluid" alt="Logo">
+                    </a>
+                    <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <ul class="main-nav">
+                    <li class="has-submenu active">
+                        <a href="{{ path('app_user_home') }}">Accueil </a>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="{{ path('app_list_employes') }}">Employes</a>
+                    
+                </ul>
+                {% else %}
+                <ul class="main-nav">
+                    <li class="has-submenu active">
+                        <a href="{{ path('app_home') }}">Accueil </a>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="{{ path('app_list_employes') }}">Employes</a>
+                    <li class="has-submenu">
+                        <a href="#" >Pharmacie</a>
+
+                    <li class="has-submenu">
+                        <a href="#">Doctoshop </a>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+            <ul class="nav header-navbar-rht">
+                <li class="nav-item contact-item">
+                    <div class="header-contact-img">
+                        <i class="far fa-hospital"></i>
+                    </div>
+                </li>
+
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <li class="nav-item dropdown has-arrow logged-item">
+                            <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                                <span class="user-img">
+                                    {% if app.user.image %}
+                                       <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/' ~ app.user.image ) }}"  width="31" alt="image">
+                                    {% else %}
+                                       <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/user1.png' ) }}"  width="31" alt="image">
+                                    {% endif %}
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <div class="user-header">
+                                    <div class="avatar avatar-sm">
+                                        {% if app.user.image %}
+                                            <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/' ~ app.user.image ) }}"  width="31" alt="image">
+                                        {% else %}
+                                            <img class="rounded-circle" src="{{ asset('uploads/utilisateurs/user1.png' ) }}"  width="31" alt="image">
+                                        {% endif %}
+                                    </div>
+                                    <div class="user-text">
+                                        <h6>{{ app.user.nom |capitalize }} {{ app.user.prenom |capitalize }}</h6>
+                                        {% if is_granted('ROLE_PATIENT') %}
+                                        <p class="text-muted mb-0">Patient</p>
+                                        {% elseif is_granted('ROLE_MEDECIN') %}
+                                        <p class="text-muted mb-0">Médecin</p>
+                                        {% elseif is_granted('ROLE_PHARMACIEN') %}
+                                        <p class="text-muted mb-0">Pharmacien</p>
+                                        {% elseif is_granted('ROLE_ASSUREUR') %}
+                                        <p class="text-muted mb-0">Asurreur</p>
+                                        {% else %}
+                                        <p class="text-muted mb-0">Admin</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% if is_granted("ROLE_MEDECIN") %}
+                                <a class="dropdown-item" href="{{ path('app_medecin_profile') }}"><i class="feather-user"></i> Mon Profil</a>
+                                {% elseif is_granted("ROLE_EMPLOYE") %}
+                                <a class="dropdown-item" href="{{ path('app_employe_profile') }}"><i class="feather-user"></i> Mon Profil</a>
+                                {% elseif is_granted("ROLE_PATIENT") %}
+                                <a class="dropdown-item" href="{{ path('app_user_profile') }}"><i class="feather-user"></i> Mon Profil</a>
+                            
+                                {% endif %}
+                                <a class="dropdown-item" href="{{ path('app_logout') }}"><i class="feather-log-out"></i>  Se déconnecter</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                           <a class="nav-link header-login" href="{{ path('app_login') }}">Se connecter / S'inscrire </a>
+                        </li>
+                   {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+{% block page %}{% endblock %}
+<div class="col-auto text-end float-end ms-auto">
+{% block lien %}
+
+{% endblock %}
+
+</div>
+{% endblock %}
+
+{% block body %}
+
+{% endblock %}
+<div class="toast-container position-fixed bottom-0 right-0 p-3">
+</div>
+<!-- Modal for creating or editing rendezVous events -->
+<div class="modal fade" id="rendezVousModal" tabindex="-1" role="dialog" aria-labelledby="rendezVousModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rendezVousModalLabel">Create RendezVous Event</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <div class="modal-body">
+      <form id="rendezVousForm">
+
+          <div class="form-group">
+            <label for="rendezVousStartDate">Start Date</label>
+            <input type="text" class="form-control" id="date" name="start" readonly required>
+          </div>
+
+
+          <div class="form-group">
+            <label for="rendezVousStartTime">Start Time</label>
+            <input type="time" class="form-control" id="heureDebut" name="startTime"  required>
+          </div>
+        <div class="form-group">
+            <label for="rendezVousEndTime">End Time</label>
+            <input type="time" class="form-control" id="heureFin" name="endTime"  required>
+          </div>
+        <div class="form-group">
+            <label for="rendezVousSymptomes">Symptomes</label>
+            <input type="text" class="form-control" id="symptomes" name="symptomes" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <input type="hidden" id="planning-id" name="planning-id" value="" />
+
+      </form>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for editing rendezVous events
+<div class="modal fade" id="editRendezVousModal" tabindex="-1" role="dialog" aria-labelledby="editRendezVousModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editRendezVousModalLabel">Edit RendezVous Event</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="editRendezVousForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editRendezVousTitle">Title</label>
+            <input type="text" class="form-control" id="editRendezVousTitle" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="editRendezVousStartDate">Start Date</label>
+            <input type="text" class="form-control" id="editRendezVousStartDate" name="start" readonly required>
+          </div>
+          <div class="form-group">
+            <label for="editRendezVousEndDate">End Date</label>
+            <input type="text" class="form-control" id="editRendezVousEndDate" name="end" readonly required>
+          </div>-->
+          <!-- add other form fields for rendezVous event properties -->
+        </div>
+
+{% block footer %}
+
+    <footer class="footer">
+
+        <div class="footer-top">
+            <div class="container-fluid">
+                <div class="row aos" data-aos="">
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="footer-widget footer-about">
+                            <div class="footer-logo">
+                                <img src="{{ asset('FrontOffice/img/logoapii.jpg') }}" alt="logo">
+                            </div>
+                            <div class="footer-about-content">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                                <div class="social-icon">
+                                    <ul>
+                                        <li>
+                                            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i> </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" target="_blank"><i class="fab fa-twitter"></i> </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#" target="_blank"><i class="fab fa-dribbble"></i> </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="footer-widget footer-menu">
+                            
+                            <ul>
+                                <li><a href="login.html">Se connecter</a></li>
+                                <li><a href="register.html">S'inscrire</a></li>
+                                <li><a href="booking.html">Rendez-vous</a></li>
+
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="footer-widget footer-menu">
+                            <ul>
+                                <li><a href="appointments.html">Rendez-vous</a></li>
+                                <li><a href="login.html">Se connecter</a></li>
+                                <li><a href="doctor-register.html">S'inscrire</a></li>
+
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="footer-widget footer-contact">
+                            <h2 class="footer-title">Nous contacter</h2>
+                            <div class="footer-contact-info">
+                                <div class="footer-address">
+                                    <span><i class="fas fa-map-marker-alt"></i></span>
+                                    <p>  R57M+R9J, Rue de Syrie<br> , Tunis </p>
+                                </div>
+                                <p>
+                                    <i class="fas fa-phone-alt"></i>
+                                    71 963 589
+                                </p>
+                                <p class="mb-0">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="https://doccure.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8de9e2eeeef8ffe8cde8f5ece0fde1e8a3eee2e0">[email&#160;protected]</a>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="footer-bottom">
+            <div class="container-fluid">
+
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6">
+                            <div class="copyright-text">
+                                <p class="mb-0">&copy; 2022 APII. All rights reserved.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+
+                            <div class="copyright-menu">
+                                <ul class="policy-menu">
+                                    <li><a href="term-condition.html">Terms and Conditions</a></li>
+                                    <li><a href="privacy-policy.html">Policy</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </footer>
+</div>
+
+{% endblock %}
+{% block javascripts%}
+    <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="FrontOffice/js/jquery-3.6.0.min.js"></script>
+
+    <script src="{{ asset('FrontOffice/js/bootstrap.bundle.min.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/plugins/swiper/js/swiper.min.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/js/jquery-3.6.0.min.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/js/slick.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/js/aos.js') }}"></script>
+
+    <script src="{{ asset('FrontOffice/js/script.js') }}"></script>
+
+    {% block notification %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    <script>
+        var userId = {{ app.user.id }};
+const eventSource = new EventSource("{{ mercure('/rdvAjouter')|escape('js') }}");
+eventSource.onmessage = event => {
+    // Will be called every time an update is published by the server
+    const rdv = JSON.parse(event.data);
+    const toastHtml = `
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="mr-auto">Nouveau RendezVous</strong>
+                <small class="text-muted">${rdv.date}</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                Vous avez reçu une demande de rendez-vous de ${rdv.nomPatient} pour le ${rdv.date} à ${rdv.heure}.
+            </div>
+        </div>
+    `;
+    const toastContainer = document.querySelector(".toast-container");
+    toastContainer.innerHTML += toastHtml;
+
+    // Show the toast notification
+    const toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    const toastList = toastElList.map(toastEl => new bootstrap.Toast(toastEl));
+    toastList.forEach(toast => toast.show());
+
+    // Add action to close button
+    const closeButtons = document.querySelectorAll(".toast .close");
+    closeButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const toast = button.closest(".toast");
+            const bsToast = bootstrap.Toast.getOrCreateInstance(toast);
+            bsToast.hide();
+        });
+    });
+
+
+}
+
+    </script>
+    {% endif %}
+
+    {% endblock %}
+    {% block calendarScript %}
+
+    {% endblock %}
+{% endblock %}
+</body>
+<!-- Mirrored from doccure.dreamguystech.com/laravel/template/public/index by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 07 Feb 2023 19:57:01 GMT -->
+</html>
+<script>
+    $(document).ready(function(){
+        // alert(1);
+        /*$('.submenu li a').click(function(){
+          $(.submenu li a).removeClass("active");
+          $(this).addClass("active");
+          $('.has-submenu a').removeClass("active");
+          $('.has-submenu a').addClass("active");
+
+          //$(this).toggleClass("active");
+        });*/
+    });
+</script>

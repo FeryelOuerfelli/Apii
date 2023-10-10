@@ -1,0 +1,48 @@
+{% extends 'sideBar.html.twig' %}
+
+
+{% block content %}
+    <h1>Planning</h1>
+
+    <table class="table">
+        <tbody>
+
+            <tr>
+                <th>Date_debut</th>
+                <td>{{ planning.dateDebut ? planning.dateDebut|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_fin</th>
+                <td>{{ planning.dateFin ? planning.dateFin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+                <td>{{ planning.etat }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ planning.description }}</td>
+            </tr>
+            <tr>
+                <th>Heure_debut</th>
+                <td>{{ planning.heureDebut ? planning.heureDebut|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Heure_fin</th>
+                <td>{{ planning.heureFin ? planning.heureFin|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_de_creation</th>
+                <td>{{ planning.dateDeCreation ? planning.dateDeCreation|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_de_modification</th>
+                <td>{{ planning.dateDeModification ? planning.dateDeModification|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+    {{ include('Front-Office/planning/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'sideBar.html.twig' %}
+
+
+{% block content %}
+    <h1>RendezVous</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ rendez_vou.id }}</td>
+            </tr>
+            <tr>
+                <th>Medecin</th>
+                <td>{{ rendez_vou.planning.medecin.nom }}  {{ rendez_vou.planning.medecin.prenom }}</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+                <td>{{ rendez_vou.etat }}</td>
+            </tr>
+            <tr>
+                <th>Symptomes</th>
+                <td>{{ rendez_vou.symptomes }}</td>
+            </tr>
+            <tr>
+                <th>Date_de_creation</th>
+                <td>{{ rendez_vou.dateDeCreation ? rendez_vou.dateDeCreation|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Heure_debut</th>
+                <td>{{ rendez_vou.heureDebut ? rendez_vou.heureDebut|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Heure_fin</th>
+                <td>{{ rendez_vou.heureFin ? rendez_vou.heureFin|date('H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_rendez_vous_index') }}">back to list</a>
+
+    <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}">edit</a>
+
+    {{ include('Front-Office/rendez_vous/_delete_form.html.twig') }}
+{% endblock %}
