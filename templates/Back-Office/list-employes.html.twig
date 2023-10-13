@@ -94,7 +94,7 @@
                                                 {% else %}
                                                     <td><a class="text-bg-primary" href="{{path('update_employe',{'id':user.id})}}"><i class="feather-edit-2"></i>Modifier</a></td>
                                                 {% endif %}
-                                                <td><a class="text-danger" onclick="return confirm('vous etes sure de vouloir supprimer ?');" href="{{path('remove_utilisateur',{'id':user.id})}}"><i class="feather-trash-2"></i>supprimer</a></td>
+                                                <td><a class="text-danger" onclick="return confirm('êtes-vous sûr  supprimer ?');" href="{{path('remove_utilisateur',{'id':user.id})}}"><i class="feather-trash-2"></i>Supprimer</a></td>
                                             </tr>
                                 {% endfor %}
                                 </tbody>

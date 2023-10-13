@@ -54,14 +54,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         }else{
             return new RedirectResponse($this->urlGenerator->generate('app_user_home'));
         }
-        // For example:
-        /*else if(in_array('ROLE_MEDECIN',$user->getRoles(),true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_medecin_profile'));
-        }else{
-            return new RedirectResponse($this->urlGenerator->generate('app_user_profile'));
-        }*/
-
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+      
     }
 
     protected function getLoginUrl(Request $request): string

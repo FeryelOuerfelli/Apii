@@ -3,12 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\EditFormMedecinType;
 use App\Form\EditFormEmployeType;
 use App\Form\EditFormUserType;
 use App\Form\SearchFormType;
 use App\Form\UserType;
-use App\Repository\PlanningRepository;
 use App\Repository\UserRepository;
 use App\Repository\MaterielRepository;
 use App\Service\MailerService;
@@ -34,11 +32,7 @@ class UtilisateurController extends AbstractController
     public function admin(UserRepository $repo , MaterielRepository $materielRepository): Response
     {
         $currentuser = $this->getUser();
-        $nbMedecins = $repo->countUsersByRole('ROLE_MEDECIN');
         $nbEmployes = $repo->countUsersByRole('ROLE_EMPLOYE');
-        $nbPatients = $repo->countUsersByRole('ROLE_PATIENT');
-        $nbPharmaciens = $repo->countUsersByRole('ROLE_PHARMACIEN');
-        $nbAssureurs = $repo->countUsersByRole('ROLE_ASSUREUR');
         $nbFemmes = $repo->countUsersBySexe('Femme');
         $nbHommes = $repo->countUsersBySexe('Homme');
         $nbmateriels = $materielRepository->count([]);
@@ -50,11 +44,7 @@ class UtilisateurController extends AbstractController
         return $this->render('Back-Office/DashboardAdmin.html.twig', [
             'controller_name' => 'UtilisateurController',
             'user'=>$currentuser,
-            'nbM'=>$nbMedecins,
             'nbE'=>$nbEmployes,
-            'nbP'=>$nbPatients,
-            'nbPh'=>$nbPharmaciens,
-            'nbA'=>$nbAssureurs,
             'nbF'=>$nbFemmes,
             'nbH'=>$nbHommes,
             'nbMat'=>$nbmateriels,
@@ -69,20 +59,7 @@ class UtilisateurController extends AbstractController
         ]);
     }
 
-    #[Route('/listRendezVous/{page?1}/{nbre?5}', name: 'app_planning_index_admin', methods: ['GET'])]
-    public function indexAdmin(PlanningRepository $planningRepository,$page, $nbre): Response
-    {
-        $plannings = $planningRepository->findBy([], [],$nbre, ($page - 1 ) * $nbre);
-        $nbPlannings = $planningRepository->count([]);
-        $nbrePage = ceil($nbPlannings / $nbre) ;
-        return $this->render('Back-Office/planning/index.html.twig', [
-            'plannings' => $plannings,
-            'isPaginated' => true,
-            'nbrePage' => $nbrePage,
-            'page' => $page,
-            'nbre' => $nbre
-        ]);
-    }
+  
 
     #[Route('/newUser', name: 'add_utilisateur')]
     public function add_utilisateur(ManagerRegistry $rg, Request $req):Response
@@ -121,16 +98,11 @@ class UtilisateurController extends AbstractController
             context: $context
         );
 
-        if (in_array('ROLE_MEDECIN', $user->getRoles(), true)) {
-            return $this->redirectToRoute('list_medecins');
-        } elseif (in_array('ROLE_EMPLOYE', $user->getRoles(), true)){
+        if (in_array('ROLE_EMPLOYE', $user->getRoles(), true)) {
             return $this->redirectToRoute('list_employes');
-        } elseif (in_array('ROLE_ASSUREUR', $user->getRoles(), true)){
-            return $this->redirectToRoute('list_assureurs');
-        }elseif (in_array('ROLE_PHARMACIEN', $user->getRoles(), true)){
-            return $this->redirectToRoute('list_pharmaciens');
+        
         }else {
-            return $this->redirectToRoute('list_patients');
+            return $this->redirectToRoute('app_admin');
         }
     }
 
@@ -143,16 +115,12 @@ class UtilisateurController extends AbstractController
         $result->persist($user);
         $result->flush();
 
-        if (in_array('ROLE_MEDECIN', $user->getRoles(), true)) {
-            return $this->redirectToRoute('list_medecins');
-        } elseif (in_array('ROLE_EMPLOYE', $user->getRoles(), true)){
+        
+            if (in_array('ROLE_EMPLOYE', $user->getRoles(), true)){
             return $this->redirectToRoute('list_employes');
-        } elseif (in_array('ROLE_ASSUREUR', $user->getRoles(), true)){
-            return $this->redirectToRoute('list_assureurs');
-        }elseif (in_array('ROLE_PHARMACIEN', $user->getRoles(), true)){
-            return $this->redirectToRoute('list_pharmaciens');
+       
         }else {
-            return $this->redirectToRoute('list_patients');
+            return $this->redirectToRoute('app_admin');
         }
     }
 
@@ -166,16 +134,12 @@ class UtilisateurController extends AbstractController
         $result->persist($user);
         $result->flush();
 
-        if (in_array('ROLE_MEDECIN', $user->getRoles(), true)) {
-            return $this->redirectToRoute('list_medecins');
-        } elseif (in_array('ROLE_EMPLOYE', $user->getRoles(), true)){
+        
+        if (in_array('ROLE_EMPLOYE', $user->getRoles(), true)){
             return $this->redirectToRoute('list_employes');
-        } elseif (in_array('ROLE_ASSUREUR', $user->getRoles(), true)){
-            return $this->redirectToRoute('list_assureurs');
-        }elseif (in_array('ROLE_PHARMACIEN', $user->getRoles(), true)){
-            return $this->redirectToRoute('list_pharmaciens');
+       
         }else {
-            return $this->redirectToRoute('list_patients');
+            return $this->redirectToRoute('app_admin');
         }
     }
 
@@ -220,47 +184,7 @@ class UtilisateurController extends AbstractController
 
     }
 
-    #[Route('/updateMed/{id}', name: 'update_medecin')]
-    public function update_medecin($id, ManagerRegistry $rg, Request $req, UserRepository $repo, SluggerInterface $slugger): Response
-    {
-        $user = $repo->find($id);
-
-        $form = $this->createForm(EditFormMedecinType::class, $user);
-        $form->handleRequest($req);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $photo = $form->get('photo')->getData();
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
-            if ($photo) {
-                $originalFilename = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $photo->guessExtension();
-                // Move the file to the directory where brochures are stored
-                try {
-                    $photo->move(
-                        $this->getParameter('utilisateurs_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
-                $user->setImage($newFilename);
-            }
-            $result = $rg->getManager();
-            $result->persist($user);
-            $result->flush();
-
-        }
-
-        return $this->render('Back-Office/Profile-Medecin.html.twig', [
-            'form' => $form->createView(),
-            'user'=>$user
-        ]);
-    }
+   
 
     #[Route('/updateEmp/{id}', name: 'update_employe')]
     public function update_employe($id, ManagerRegistry $rg, Request $req, UserRepository $repo, SluggerInterface $slugger): Response
@@ -310,42 +234,27 @@ class UtilisateurController extends AbstractController
     {
         $user = $repo->find($id);
         $result = $rg->getManager();
+         $materiels = $user->getMateriels();
+         $admin = $repo->findOneBy(['email' => 'admin20@gmail.com']);
+            
+            // Dissociez les matériels de l'employé en définissant leur employé sur null
+            foreach ($materiels as $materiel) {
+                $materiel->setAffectation($admin);
+                $materiel->setEtat("En Stock");
+            }
+        
         $result->remove($user);
         $result->flush();
 
-        if (in_array('ROLE_MEDECIN', $user->getRoles(), true)) {
-            return $this->redirectToRoute('list_medecins');
-        } elseif (in_array('ROLE_ASSUREUR', $user->getRoles(), true)){
-            return $this->redirectToRoute('list_assureurs');
-        }elseif (in_array('ROLE_PHARMACIEN', $user->getRoles(), true)){
-            return $this->redirectToRoute('list_pharmaciens');
+        if (in_array('ROLE_EMPLOYE', $user->getRoles(), true)) {
+            return $this->redirectToRoute('list_employes');
+    
         }else {
-            return $this->redirectToRoute('list_patients');
+            return $this->redirectToRoute('app_admin');
         }
     }
 
-    #[Route('/listMedecins/{page?1}/{nbre?5}', name: 'list_medecins')]
-    public function list_medecin(UserRepository $repo,Request $req,$nbre,$page):Response
-    {
-        $nbMedecins = $repo->countUsersByRole('ROLE_MEDECIN');
-        $nbrePage = ceil($nbMedecins / $nbre) ;
-        $users = $repo->findUsersByRole($page,$nbre,'ROLE_MEDECIN');
-
-        $form = $this->createForm(SearchFormType::class);
-        $form->handleRequest($req);
-        if($form->isSubmitted() ) {
-            $searchTerm = $form->getData();
-            $users = $repo->findUsersBySearchTerm($searchTerm);
-        }
-        return $this->render('Back-Office/list-medecins.html.twig', [
-            'users' => $users,
-            'form'=>$form->createView(),
-            'isPaginated'=>true,
-            'nbrePage' => $nbrePage,
-            'page' => $page,
-            'nbre' => $nbre
-        ]);
-    }
+   
     #[Route('/listEmployes/{page?1}/{nbre?5}', name: 'list_employes')]
     public function list_employe(UserRepository $repo,Request $req,$nbre,$page):Response
     {
@@ -369,77 +278,10 @@ class UtilisateurController extends AbstractController
         ]);
     }
 
-    #[Route('/listAssureurs/{page?1}/{nbre?5}', name: 'list_assureurs')]
-    public function list_assureur(UserRepository $repo,Request $req,$page,$nbre):Response
-    {
-        $nbAssureurs = $repo->countUsersByRole('ROLE_ASSUREUR');
-        $nbrePage = ceil($nbAssureurs / $nbre) ;
-        $users = $repo->findUsersByRole($page,$nbre,'ROLE_ASSUREUR');
+   
 
-        $form = $this->createForm(SearchFormType::class);
-        $form->handleRequest($req);
-        if($form->isSubmitted() ) {
-            $searchTerm = $form->getData();
-            $users = $repo->findUsersBySearchTerm($searchTerm);
-        }
-        return $this->render('Back-Office/list-assureurs.html.twig', [
-            'users' => $users,
-            'form'=>$form->createView(),
-            'isPaginated'=>true,
-            'nbrePage' => $nbrePage,
-            'page' => $page,
-            'nbre' => $nbre
-        ]);
-    }
-
-    #[Route('/listPatients/{page?1}/{nbre?5}', name: 'list_patients')]
-    public function list_patient(UserRepository $repo,Request $req,$nbre,$page):Response
-    {
-
-        $nbPatients = $repo->countUsersByRole('ROLE_PATIENT');
-        $nbrePage = ceil($nbPatients / $nbre) ;
-        $users = $repo->findUsersByRole($page,$nbre,'ROLE_PATIENT');
-
-        $form = $this->createForm(SearchFormType::class);
-        $form->handleRequest($req);
-        if($form->isSubmitted() ) {
-            $searchTerm = $form->getData();
-            $users = $repo->findUsersBySearchTerm($searchTerm);
-        }
-
-        return $this->render('Back-Office/list-patients.html.twig', [
-            'users' => $users,
-            'form'=>$form->createView(),
-            'isPaginated'=>true,
-            'nbrePage' => $nbrePage,
-            'page' => $page,
-            'nbre' => $nbre
-        ]);
-    }
-
-    #[Route('/listPharmaciens/{page?1}/{nbre?5}', name: 'list_pharmaciens')]
-    public function list_pharmacien(UserRepository $repo,Request $req,$nbre,$page): Response
-    {
-        $nbPharmaciens = $repo->countUsersByRole('ROLE_PHARMACIEN');
-        $nbrePage = ceil($nbPharmaciens / $nbre) ;
-        $users = $repo->findUsersByRole($page,$nbre,'ROLE_PHARMACIEN');
-
-        $form = $this->createForm(SearchFormType::class);
-        $form->handleRequest($req);
-        if($form->isSubmitted() ) {
-            $searchTerm = $form->getData();
-            $users = $repo->findUsersBySearchTerm($searchTerm);
-        }
-
-        return $this->render('Back-Office/list-pharmaciens.html.twig', [
-            'users' => $users,
-            'form'=>$form->createView(),
-            'isPaginated'=>true,
-            'nbrePage' => $nbrePage,
-            'page' => $page,
-            'nbre' => $nbre
-        ]);
-    }
+   
+    
  
     }
 

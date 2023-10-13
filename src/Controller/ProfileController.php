@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Form\EditFormMedecinType;
 use App\Form\EditFormEmployeType;
 use App\Form\EditFormUserType;
 use App\Form\SearchFormType;
@@ -160,50 +159,6 @@ class ProfileController extends AbstractController
         ]);
     }
     
-    #[Route('/MSettings', name: 'app_medecin_profile')]
-    public function update_profile_medecin(ManagerRegistry $rg, Request $req, SluggerInterface $slugger): Response
-    {
-        //$user = $repo->find($id);
-        $user=$this->getUser();
-        $form = $this->createForm(EditFormMedecinType::class, $user);
-
-        $form->handleRequest($req);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $photo = $form->get('photo')->getData();
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
-            if ($photo) {
-                $originalFilename = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $photo->guessExtension();
-                // Move the file to the directory where brochures are stored
-                try {
-                    $photo->move(
-                        $this->getParameter('utilisateurs_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
-                $user->setImage($newFilename);
-            }
-
-            $result = $rg->getManager();
-            $result->persist($user);
-            $result->flush();
-
-        }
-
-        return $this->render('Front-Office/profile/profile-medecin.html.twig', [
-            'form' => $form->createView(),
-            'user'=>$user
-        ]);
-    }
-
-
+   
    }
 

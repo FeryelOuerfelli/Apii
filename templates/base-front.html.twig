@@ -18,10 +18,8 @@
     <link rel="stylesheet" href="{{ asset('FrontOffice/css/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('FrontOffice/css/style.css') }}">
 
-    {% block calendarStyle %}
 
     {% endblock %}
-{% endblock %}
 </head>
 <body>
 {% block header %}
@@ -36,7 +34,7 @@
                     <span></span>
                     </span>
                 </a>
-                <a href="index.html" class="navbar-brand logo">
+                <a href="{{ path('app_home') }}" class="navbar-brand logo">
                     <img src="{{ asset('FrontOffice/img/logoapii.jpg') }}" class="img-fluid" alt="Logo">
                 </a>
             </div>
@@ -64,13 +62,9 @@
                         <a href="{{ path('app_home') }}">Accueil </a>
                     </li>
                     <li class="has-submenu">
-                        <a href="{{ path('app_list_employes') }}">Employes</a>
-                    <li class="has-submenu">
-                        <a href="#" >Pharmacie</a>
-
-                    <li class="has-submenu">
-                        <a href="#">Doctoshop </a>
-                    </li>
+                        <a href="{{ path('app_home') }}">Employes</a>
+                      </li>
+                   
                 </ul>
                 {% endif %}
             </div>
@@ -103,26 +97,18 @@
                                     </div>
                                     <div class="user-text">
                                         <h6>{{ app.user.nom |capitalize }} {{ app.user.prenom |capitalize }}</h6>
-                                        {% if is_granted('ROLE_PATIENT') %}
-                                        <p class="text-muted mb-0">Patient</p>
-                                        {% elseif is_granted('ROLE_MEDECIN') %}
-                                        <p class="text-muted mb-0">Médecin</p>
-                                        {% elseif is_granted('ROLE_PHARMACIEN') %}
-                                        <p class="text-muted mb-0">Pharmacien</p>
-                                        {% elseif is_granted('ROLE_ASSUREUR') %}
-                                        <p class="text-muted mb-0">Asurreur</p>
+                                        {% if is_granted('ROLE_EMPLOYE') %}
+                                        <p class="text-muted mb-0">Employe</p>
+                                       
                                         {% else %}
                                         <p class="text-muted mb-0">Admin</p>
                                         {% endif %}
                                     </div>
                                 </div>
-                                {% if is_granted("ROLE_MEDECIN") %}
-                                <a class="dropdown-item" href="{{ path('app_medecin_profile') }}"><i class="feather-user"></i> Mon Profil</a>
-                                {% elseif is_granted("ROLE_EMPLOYE") %}
+                               
+                                {% if is_granted("ROLE_EMPLOYE") %}
                                 <a class="dropdown-item" href="{{ path('app_employe_profile') }}"><i class="feather-user"></i> Mon Profil</a>
-                                {% elseif is_granted("ROLE_PATIENT") %}
-                                <a class="dropdown-item" href="{{ path('app_user_profile') }}"><i class="feather-user"></i> Mon Profil</a>
-                            
+                               
                                 {% endif %}
                                 <a class="dropdown-item" href="{{ path('app_logout') }}"><i class="feather-log-out"></i>  Se déconnecter</a>
                             </div>
@@ -151,48 +137,7 @@
 <div class="toast-container position-fixed bottom-0 right-0 p-3">
 </div>
 <!-- Modal for creating or editing rendezVous events -->
-<div class="modal fade" id="rendezVousModal" tabindex="-1" role="dialog" aria-labelledby="rendezVousModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="rendezVousModalLabel">Create RendezVous Event</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    <div class="modal-body">
-      <form id="rendezVousForm">
 
-          <div class="form-group">
-            <label for="rendezVousStartDate">Start Date</label>
-            <input type="text" class="form-control" id="date" name="start" readonly required>
-          </div>
-
-
-          <div class="form-group">
-            <label for="rendezVousStartTime">Start Time</label>
-            <input type="time" class="form-control" id="heureDebut" name="startTime"  required>
-          </div>
-        <div class="form-group">
-            <label for="rendezVousEndTime">End Time</label>
-            <input type="time" class="form-control" id="heureFin" name="endTime"  required>
-          </div>
-        <div class="form-group">
-            <label for="rendezVousSymptomes">Symptomes</label>
-            <input type="text" class="form-control" id="symptomes" name="symptomes" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-        <input type="hidden" id="planning-id" name="planning-id" value="" />
-
-      </form>
-    </div>
-    </div>
-  </div>
-</div>
 
 <!-- Modal for editing rendezVous events
 <div class="modal fade" id="editRendezVousModal" tabindex="-1" role="dialog" aria-labelledby="editRendezVousModalLabel" aria-hidden="true">
@@ -235,7 +180,7 @@
                                 <img src="{{ asset('FrontOffice/img/logoapii.jpg') }}" alt="logo">
                             </div>
                             <div class="footer-about-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                                <p>L'Agence de promotion de l'industrie et de l'innovation est une agence gouvernementale tunisienne qui a pour mission de mettre en œuvre la politique du gouvernement relative à la promotion du secteur industriel en tant que structure d'appui aux entreprises et aux promoteurs. </p>
                                 <div class="social-icon">
                                     <ul>
                                         <li>
@@ -264,9 +209,9 @@
                         <div class="footer-widget footer-menu">
                             
                             <ul>
-                                <li><a href="login.html">Se connecter</a></li>
-                                <li><a href="register.html">S'inscrire</a></li>
-                                <li><a href="booking.html">Rendez-vous</a></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
 
                             </ul>
                         </div>
@@ -317,7 +262,7 @@
                     <div class="row">
                         <div class="col-md-6 col-lg-6">
                             <div class="copyright-text">
-                                <p class="mb-0">&copy; 2022 APII. All rights reserved.</p>
+                                <p class="mb-0">&copy; 2023 APII. All rights reserved.</p>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-6">
@@ -355,56 +300,8 @@
 
     <script src="{{ asset('FrontOffice/js/script.js') }}"></script>
 
-    {% block notification %}
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-    <script>
-        var userId = {{ app.user.id }};
-const eventSource = new EventSource("{{ mercure('/rdvAjouter')|escape('js') }}");
-eventSource.onmessage = event => {
-    // Will be called every time an update is published by the server
-    const rdv = JSON.parse(event.data);
-    const toastHtml = `
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="mr-auto">Nouveau RendezVous</strong>
-                <small class="text-muted">${rdv.date}</small>
-                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="toast-body">
-                Vous avez reçu une demande de rendez-vous de ${rdv.nomPatient} pour le ${rdv.date} à ${rdv.heure}.
-            </div>
-        </div>
-    `;
-    const toastContainer = document.querySelector(".toast-container");
-    toastContainer.innerHTML += toastHtml;
-
-    // Show the toast notification
-    const toastElList = [].slice.call(document.querySelectorAll('.toast'))
-    const toastList = toastElList.map(toastEl => new bootstrap.Toast(toastEl));
-    toastList.forEach(toast => toast.show());
-
-    // Add action to close button
-    const closeButtons = document.querySelectorAll(".toast .close");
-    closeButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            const toast = button.closest(".toast");
-            const bsToast = bootstrap.Toast.getOrCreateInstance(toast);
-            bsToast.hide();
-        });
-    });
-
-
-}
-
-    </script>
-    {% endif %}
-
-    {% endblock %}
-    {% block calendarScript %}
-
-    {% endblock %}
+    
+   
 {% endblock %}
 </body>
 <!-- Mirrored from doccure.dreamguystech.com/laravel/template/public/index by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 07 Feb 2023 19:57:01 GMT -->

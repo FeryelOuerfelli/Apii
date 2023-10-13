@@ -96,17 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255,nullable:true)]
     private ?string $etat = null;
 
-    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: RendezVous::class)]
-    private Collection $rendezVouses;
-
-    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Planning::class)]
-    private Collection $plannings;
-
-    #[ORM\OneToMany(mappedBy: 'assureur', targetEntity: FicheAssurance::class)]
-    private Collection $ficheAssurances;
-
-    #[ORM\OneToOne(mappedBy: 'pharmacien', cascade: ['persist', 'remove'])]
-    private ?Pharmacie $pharmacie = null;
+   
 
     #[ORM\Column(length: 255,nullable: true)]
     private ?string $resetToken = null;
@@ -127,9 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->rendezVouses = new ArrayCollection();
-        $this->plannings = new ArrayCollection();
-        $this->ficheAssurances = new ArrayCollection();
+       
         $this->materiels = new ArrayCollection();
     }
 
@@ -402,118 +390,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, RendezVous>
-     */
-    public function getRendezVouses(): Collection
-    {
-        return $this->rendezVouses;
-    }
+  
+ 
+   
+   
 
-    public function addRendezVouse(RendezVous $rendezVouse): self
-    {
-        if (!$this->rendezVouses->contains($rendezVouse)) {
-            $this->rendezVouses->add($rendezVouse);
-            $rendezVouse->setPatient($this);
-        }
+   
 
-        return $this;
-    }
+   
 
-    public function removeRendezVouse(RendezVous $rendezVouse): self
-    {
-        if ($this->rendezVouses->removeElement($rendezVouse)) {
-            // set the owning side to null (unless already changed)
-            if ($rendezVouse->getPatient() === $this) {
-                $rendezVouse->setPatient(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Planning>
-     */
-    public function getPlannings(): Collection
-    {
-        return $this->plannings;
-    }
-
-    public function addPlanning(Planning $planning): self
-    {
-        if (!$this->plannings->contains($planning)) {
-            $this->plannings->add($planning);
-            $planning->setMedecin($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlanning(Planning $planning): self
-    {
-        if ($this->plannings->removeElement($planning)) {
-            // set the owning side to null (unless already changed)
-            if ($planning->getMedecin() === $this) {
-                $planning->setMedecin(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, FicheAssurance>
-     */
-    public function getFicheAssurances(): Collection
-    {
-        return $this->ficheAssurances;
-    }
-
-    public function addFicheAssurance(FicheAssurance $ficheAssurance): self
-    {
-        if (!$this->ficheAssurances->contains($ficheAssurance)) {
-            $this->ficheAssurances->add($ficheAssurance);
-            $ficheAssurance->setAssureur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFicheAssurance(FicheAssurance $ficheAssurance): self
-    {
-        if ($this->ficheAssurances->removeElement($ficheAssurance)) {
-            // set the owning side to null (unless already changed)
-            if ($ficheAssurance->getAssureur() === $this) {
-                $ficheAssurance->setAssureur(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getPharmacie(): ?Pharmacie
-    {
-        return $this->pharmacie;
-    }
-
-    public function setPharmacie(?Pharmacie $pharmacie): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($pharmacie === null && $this->pharmacie !== null) {
-            $this->pharmacie->setPharmacien(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($pharmacie !== null && $pharmacie->getPharmacien() !== $this) {
-            $pharmacie->setPharmacien($this);
-        }
-
-        $this->pharmacie = $pharmacie;
-
-        return $this;
-    }
-
+    
     public function getResetToken(): ?string
     {
         return $this->resetToken;

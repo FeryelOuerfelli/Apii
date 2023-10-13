@@ -22,14 +22,11 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Matériels</h4>
-                       <a href="{{ path('app_materiel_new') }}" class="btn btn-primary btn-sm" >Ajouter Matériel</a>
-                     <div class="d-flex justify-content-end">
-                            {{ form_start(form) }}
-                            {{ form_widget(form) }}
-                            {{ form_end(form) }}
-                        </div>
+                       <a href="{{ path('app_materiel_new') }}" class="btn btn-primary btn-lg" type="button" >Ajouter Matériel</a>
+
                     </div>
                     <div class="card-body">
+                    <input class="form-control" id="myInput" type="text" id="navbar-search-input" placeholder="Chercher.." aria-label="search" aria-describedby="search">
                         <div class="table-responsive">
                             <table class="table table-nowrap mb-0">
                                 <thead>
@@ -44,13 +41,12 @@
                                       <th>Région </th> 
                                       <th>Structure </th> 
                                      <th>Etat</th>
-                                       <th>actions</th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody  id="hi" >
                                             {% for materiel in materiels %}
                                             <tr>
                 
@@ -118,7 +114,18 @@
         </div>
     </div>
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		<script>
+    	$(document).ready(function(){
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#hi tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    	});
+		</script>
 {% endblock %}
 
 

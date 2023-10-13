@@ -23,47 +23,8 @@
                                     </div>
                                 </div>
                             </div>
-                            {% if is_granted('ROLE_MEDECIN') %}
-                            <div class="dashboard-widget">
-                                <nav class="dashboard-menu">
-                                    <ul>
-                                        <li >
-                                            <a href="{{ path('app_rendez_vous_index') }}">
-                                                <i class="fas fa-calendar-check"></i>
-                                                <span>Rendez-vous</span>
-                                            </a>
-                                        </li>
-
-                                        <li >
-                                            <a href="{{ path('app_calendar',{'id_medecin':user.id}) }}">
-                                                <i class="fas fa-calendar-check"></i>
-                                                <span>Calendrier</span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ path('app_planning_index') }}">
-                                                <i class="fas fa-clock"></i>
-                                                <span>Planning</span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ path('app_medecin_profile') }}">
-                                                <i class="fas fa-user-cog"></i>
-                                                <span>Parametre du profile</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_logout') }}">
-                                                <i class="fas fa-sign-out-alt"></i>
-                                                <span>Se déconnecter</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            {% elseif is_granted('ROLE_EMPLOYE') %}
+                           
+                            {% if is_granted('ROLE_EMPLOYE') %}
                             <div class="dashboard-widget">
                                 <nav class="dashboard-menu">
                                     <ul>
@@ -97,32 +58,7 @@
                                     </ul>
                                 </nav>
                             </div>
-                            {% elseif is_granted('ROLE_PATIENT') %}
-                            <div class="dashboard-widget">
-                                <nav class="dashboard-menu">
-                                    <ul>
-                                        <li class="active">
-                                            <a href="{{ path('app_rendez_vous_index') }}">
-                                                <i class="fas fa-calendar-check"></i>
-                                                <span>Rendez-vous</span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ path('app_user_profile') }}">
-                                                <i class="fas fa-user-cog"></i>
-                                                <span>Parametre du profile</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="index.html">
-                                                <i class="fas fa-sign-out-alt"></i>
-                                                <span>Se déconnecter</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
+                            
                             {% endif %}
                         </div>
                     </div>

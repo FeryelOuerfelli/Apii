@@ -89,12 +89,6 @@ class GoogleAuthenticator extends SocialAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
 
-        /* $user = $token->getUser();
-        if(in_array('ROLE_MEDECIN',$user->getRoles(),true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_medecin_profile'));
-        }else{
-            return new RedirectResponse($this->urlGenerator->generate('app_user_profile'));
-        }*/
         return new RedirectResponse($this->urlGenerator->generate('app_user_home'));
         return new RedirectResponse($targetUrl);
 
