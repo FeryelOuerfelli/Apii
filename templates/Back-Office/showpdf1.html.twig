@@ -1,37 +1,65 @@
 {% extends "base-pdf.html.twig" %}
-{% block title %}Matériel{{user.id}} {% endblock %}
+
+{% block title %}Matériel{{ user.id }}{% endblock %}
+
 {% block body %}
-
 <div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.min.css">
-<h1 align='center' style="color: black">Fiche Employé</h1>
- </div>
+        <img class="avatar avatar-img" src="{{ absolute_url(asset('FrontOffice/img/logoapii.jpg')) }}" align='right'>
+    </div>
+    
+    <div>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.min.css">
+        <h1 align='center' style="color: black">Fiche Employé</h1>
+    </div>
+    <div>
+        <img src="{{ absolute_url(asset('uploads/utilisateurs/' ~ user.image)) }}" width="200" height="100" class="img-fluid" align='left' alt="Logo">
+    </div>
 
- <div>
-<table width="100%" border="1">
-<tr>
-                <td colspan="2">
-                
- <img  class="avatar avatar-img" src="{{ absolute_url (asset('FrontOffice/img/logoapii.jpg')) }}"   align='right' >
-
-<img src ="{{ absolute_url (asset('uploads/utilisateurs/' ~ user.image))  }}" width="200" height="100" class="img-fluid"  align='left' alt="Logo">
-
-<h3 style="color: blue" align='left'> Nom :{{ user.nom |capitalize }}</h3>
-<h3 style="color: blue" align='left' > Prénom :{{ user.prenom |capitalize  }}</h3>
-<h3 style="color: blue" align='left' > Adresse :{{ user.adresse }}</h3>
-<h3 style="color: blue" align='left' > Numero de Téléphone:{{ user.numTel  }}</h3>
-<h3 style="color: blue" align='left' > Spécialité:{{ user.specialite   }}</h3>
-<h3 style="color: blue" align='left' > Date de Naissance: <span>{{ user.dateDeNaissance ? user.dateDeNaissance|date('d-m-Y') : '' }}</span></li>
-<h3 style="color: blue" align='left' > Adresse :{{ user.adresse }}</h3>
-<h3 style="color: blue" align='left' > Region :{{ user.region  }}</h3>
-<h3 style="color: blue" align='left' > Structure :{{ user.structure  }}</h3>
-
-                                                
+        <br>
+     <br>
+     <br>
 
 
-</div>
-<br>
-
-
-
+    <div>
+     <br>
+     <br>
+      <br>
+       <br>
+       <br>
+       <br>
+        <table>
+            <tr>
+                <td><strong>Nom:</strong> {{ user.nom | capitalize }}</td>
+           <br>
+            </tr>
+            <tr>
+                <td><strong>Prénom:</strong> {{ user.prenom | capitalize }}</td>
+           <br>
+            </tr>
+            <tr>
+                <td><strong>Adresse:</strong> {{ user.adresse }}</td>
+          <br>
+            </tr>
+            <tr>
+                <td><strong>Numéro de Téléphone:</strong> {{ user.numTel }}</td>
+           <br>
+            </tr>
+            <tr>
+                <td><strong>Spécialité:</strong> {{ user.specialite }}</td>
+            <br>
+            </tr>
+            <tr>
+                <td><strong>Date de Naissance:</strong> <span>{{ user.dateDeNaissance ? user.dateDeNaissance|date('d-m-Y') : '' }}</span></td>
+           <br>
+            </tr>
+            <tr>
+                <td><strong>Région:</strong> {{ user.region }}</td>
+                <br>
+            </tr>
+            
+            <tr>
+                <td><strong>Structure:</strong> {{ user.structure }}</td>
+            </tr>
+        </table>
+    </div>
 {% endblock %}
